@@ -2,6 +2,8 @@
 
 Split a sequence of points so that each subsequence is close to a desired length. This is useful, e.g., if you want to break a geographic LineString into a MultiLineString _without_ interpolating new points or altering existing points. The algorithm is an adaptation of text justification using dynamic programming.
 
+[![Go](https://github.com/invisiblefunnel/linebreak/actions/workflows/go.yml/badge.svg)](https://github.com/invisiblefunnel/linebreak/actions/workflows/go.yml)
+
 ## Usage
 
 ```golang
