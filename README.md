@@ -19,13 +19,17 @@ func main() {
 
     dists := make([]float64, len(line)-1)
     for i := 0; i < len(line)-1; i++ {
-        dists = append(dists, pointDist(line[i], line[i+1]))
+        dists[i] = pointDist(line[i], line[i+1])
     }
 
     targetDist := 11.0
     linebreak.Solve(dists, targetDist, func(i, j int) {
         fmt.Println(lineDist(line[i:j+1]), line[i:j+1])
     })
+
+    // 8.54400374531753 [[0 0] [3 8]]
+    // 8.06225774829855 [[3 8] [4 16]]
+    // 14.318563970885672 [[4 16] [10 23] [11 28]]
 }
 
 func pointDist(a, b [2]float64) float64 {

@@ -12,7 +12,7 @@ func main() {
 
 	dists := make([]float64, len(line)-1)
 	for i := 0; i < len(line)-1; i++ {
-		dists = append(dists, pointDist(line[i], line[i+1]))
+		dists[i] = pointDist(line[i], line[i+1])
 	}
 
 	targetDist := 11.0
