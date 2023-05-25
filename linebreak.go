@@ -69,6 +69,7 @@ func (s solver) dp(i int) float64 {
 		}
 	}
 
+	s.memo[i] = minBadness
 	return minBadness
 }
 
