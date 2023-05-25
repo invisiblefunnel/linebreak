@@ -3,22 +3,21 @@ package linebreak
 import "math"
 
 type solver struct {
-	targetDist     float64
+	distMatrix [][]float64
+	targetDist float64
+
 	n              int
 	memo           []float64
 	parentPointers []int
-	distMatrix     [][]float64
 }
 
 func Solve(dists []float64, targetDist float64, f func(i, j int)) {
 	n := len(dists) + 1
-
 	memo := make([]float64, n)
-	parents := make([]int, n)
 	distMatrix := make([][]float64, n)
+
 	for i := 0; i < n; i++ {
 		memo[i] = -1
-		parents[i] = n - 1
 		distMatrix[i] = make([]float64, n)
 	}
 
@@ -29,11 +28,12 @@ func Solve(dists []float64, targetDist float64, f func(i, j int)) {
 	}
 
 	s := solver{
-		targetDist:     targetDist,
+		distMatrix: distMatrix,
+		targetDist: targetDist,
+
 		n:              n,
-		distMatrix:     distMatrix,
 		memo:           memo,
-		parentPointers: parents,
+		parentPointers: make([]int, n),
 	}
 
 	s.solve(f)
