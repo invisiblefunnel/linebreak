@@ -2,6 +2,7 @@ package linebreak_test
 
 import (
 	"math"
+	"math/rand"
 	"reflect"
 	"testing"
 
@@ -97,4 +98,31 @@ func TestSolveBreaksAll(t *testing.T) {
 	if !reflect.DeepEqual(expected, actual) {
 		t.Fail()
 	}
+}
+
+func BenchmarkSolve(b *testing.B) {
+	var (
+		N int = 1000
+
+		maxDist    float64 = 100
+		targetDist float64 = maxDist * 2
+	)
+
+	dists := make([]float64, N)
+	for i := 0; i < N; i++ {
+		dists[i] = randFloat(0, 1000)
+	}
+
+	f := func(i, j int) {}
+
+	b.ReportAllocs()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		linebreak.Solve(dists, targetDist, f)
+	}
+}
+
+func randFloat(min, max float64) float64 {
+	return min + rand.Float64()*(max-min)
 }
