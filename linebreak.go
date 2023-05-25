@@ -3,21 +3,21 @@ package linebreak
 import "math"
 
 type solver struct {
-	targetDist float64
-	n          int
-	costs      []float64
-	parents    []int
-	distMatrix [][]float64
+	targetDist     float64
+	n              int
+	memo           []float64
+	parentPointers []int
+	distMatrix     [][]float64
 }
 
 func Solve(dists []float64, targetDist float64, f func(i, j int)) {
 	n := len(dists) + 1
 
-	costs := make([]float64, n)
+	memo := make([]float64, n)
 	parents := make([]int, n)
 	distMatrix := make([][]float64, n)
 	for i := 0; i < n; i++ {
-		costs[i] = -1
+		memo[i] = -1
 		parents[i] = n - 1
 		distMatrix[i] = make([]float64, n)
 	}
@@ -29,43 +29,43 @@ func Solve(dists []float64, targetDist float64, f func(i, j int)) {
 	}
 
 	s := solver{
-		targetDist: targetDist,
-		n:          n,
-		distMatrix: distMatrix,
-		costs:      costs,
-		parents:    parents,
+		targetDist:     targetDist,
+		n:              n,
+		distMatrix:     distMatrix,
+		memo:           memo,
+		parentPointers: parents,
 	}
 
 	s.solve(f)
 }
 
 func (s solver) solve(f func(i, j int)) {
-	s.cost(0)
+	s.dp(0)
 
 	var start, end int
 	for start != s.n-1 {
-		end = s.parents[start]
+		end = s.parentPointers[start]
 		f(start, end)
 		start = end
 	}
 }
 
-func (s solver) cost(i int) float64 {
-	if s.costs[i] >= 0 {
-		return s.costs[i]
+func (s solver) dp(i int) float64 {
+	if s.memo[i] >= 0 {
+		return s.memo[i]
 	}
 
 	if i == s.n-1 {
-		s.costs[i] = 0
-		return s.costs[i]
+		s.memo[i] = 0
+		return s.memo[i]
 	}
 
 	minBadness := math.Inf(1)
 	for j := i + 1; j < s.n; j++ {
-		badness := s.badness(i, j) + s.cost(j)
+		badness := s.badness(i, j) + s.dp(j)
 		if badness < minBadness {
 			minBadness = badness
-			s.parents[i] = j
+			s.parentPointers[i] = j
 		}
 	}
 
